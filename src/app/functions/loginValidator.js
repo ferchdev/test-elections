@@ -17,6 +17,7 @@ export const loginValidator = (values, setIsLogin, push) => {
   );
   if (isExistsUser) {
     setIsLogin(true);
+    localStorage.setItem("active_session", values.check);
     push("/account");
   } else showErrorAlert();
 };

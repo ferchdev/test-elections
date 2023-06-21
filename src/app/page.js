@@ -11,9 +11,14 @@ import SessionContext from "@/context/SessionContext";
 export default function Home() {
   const { push } = useRouter();
   const { setIsLogin } = useContext(SessionContext);
+  if (localStorage.getItem("active_session") === "true") {
+    setIsLogin(true);
+    return push("/account");
+  }
   const [values, setValues] = useState({
     email: "",
     password: "",
+    check: false,
   });
   const handleChange = (event) => {
     showErrorColor(event);
@@ -27,6 +32,7 @@ export default function Home() {
     e.preventDefault();
     loginValidator(values, setIsLogin, push);
   };
+
   return (
     <main className="sigin__main">
       <section className={`sigin__section shadow-lg`}>
@@ -71,6 +77,18 @@ export default function Home() {
               size={20}
             />
           </Form.Group>
+          <Form.Check
+            label={`keep session active`}
+            id="check"
+            className="mb-4"
+            name="check"
+            onChange={(e) =>
+              setValues({
+                ...values,
+                [e.target.name]: e.target.checked,
+              })
+            }
+          />
           <span className="d-flex justify-content-end gap-2 align-items-center">
             <Button variant="primary" type="submit">
               Sign in

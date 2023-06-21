@@ -12,7 +12,7 @@ import SessionContext from "@/context/SessionContext";
 import { useRouter } from "next/navigation";
 export default function Page() {
   const { push } = useRouter();
-  const { isLogin } = useContext(SessionContext);
+  const { isLogin, setIsLogin } = useContext(SessionContext);
   if (!isLogin) return push("/");
   const [values, setValues] = useState({
     year: "",
@@ -37,13 +37,21 @@ export default function Page() {
     e.preventDefault();
     validateFormData(values, setShowTable);
   };
+
+  const signOut = () => {
+    localStorage.setItem("active_session", "false");
+    setIsLogin(false);
+  };
   return (
     <>
       {!showTable && isLogin ? (
         <section className="section__account shadow-lg position-relative">
-          <h6 className="mb-4 text-secondary bg-primary py-3 text-white text-start">
-            Election
-          </h6>
+          <div className="px-3 mb-4 bg-primary py-3 d-flex justify-content-between align-items-center">
+            <h6 className="text-white text-start m-0">Election</h6>
+            <button className="btn btn-danger" onClick={() => signOut()}>
+              Sign out
+            </button>
+          </div>
           <Form onSubmit={handleSubmit} className="form__account">
             <Form.Group className="mb-4">
               <Form.Label htmlFor="year">Year</Form.Label>

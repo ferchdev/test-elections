@@ -47,10 +47,6 @@ body {
   font-weight: 600;
 }
 
-.section__account > h6 {
-  padding-left: 20px;
-}
-
 .tableData {
   width: 500px;
   max-height: 500px;
