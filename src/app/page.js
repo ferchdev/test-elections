@@ -11,12 +11,14 @@ import SessionContext from "@/context/SessionContext";
 export default function Home() {
   const { push } = useRouter();
   const { setIsLogin } = useContext(SessionContext);
-  if (window !== "undefined") {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
     if (localStorage.getItem("active_session") === "true") {
       setIsLogin(true);
       return push("/account");
     }
-  }
+    setShow(true);
+  }, []);
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -37,7 +39,7 @@ export default function Home() {
 
   return (
     <>
-      {window !== "undefined" && (
+      {show && (
         <main className="sigin__main">
           <section className={`sigin__section shadow-lg`}>
             <Form onSubmit={handleSubmit}>
