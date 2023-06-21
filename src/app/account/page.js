@@ -3,7 +3,7 @@ import { data_elections } from "@/data/data_elections";
 import { useFormValidator } from "@/hooks/useFormValidator";
 import { errorValidator } from "@/utilities/errorValidator";
 import { showErrorColor } from "@/utilities/showErrorColor";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { validateFormData } from "./functions/validateFormData";
@@ -13,7 +13,11 @@ import { useRouter } from "next/navigation";
 export default function Page() {
   const { push } = useRouter();
   const { isLogin, setIsLogin } = useContext(SessionContext);
-  if (!isLogin) return push("/");
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    if (!isLogin) return push("/");
+    setShow(true);
+  }, []);
   const [values, setValues] = useState({
     year: "",
     politicalParty: "",
@@ -41,10 +45,11 @@ export default function Page() {
   const signOut = () => {
     localStorage.setItem("active_session", "false");
     setIsLogin(false);
+    push("/");
   };
   return (
     <>
-      {!showTable && isLogin ? (
+      {show && (!showTable && isLogin ? (
         <section className="section__account shadow-lg position-relative">
           <div className="px-3 mb-4 bg-primary py-3 d-flex justify-content-between align-items-center">
             <h6 className="text-white text-start m-0">Election</h6>
@@ -122,8 +127,8 @@ export default function Page() {
           </button>
         </section>
       ) : (
-        <TableData setShowTable={setShowTable} />
-      )}
+        showTable && <TableData setShowTable={setShowTable} />
+      ))}
     </>
   );
 }
